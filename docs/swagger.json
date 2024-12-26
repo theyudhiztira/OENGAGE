@@ -1,0 +1,380 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Open Engage Backend API",
+        "description": "API documentation for the Open Engage backend service.",
+        "version": "0.0.1"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8080/v1",
+            "description": "Local server"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        },
+        "responses": {
+            "UnauthorizedError": {
+                "description": "Access token is missing or invalid",
+                "content": {
+                    "application/json": {
+                        "examples": {
+                            "Bad Request": {
+                                "value": {
+                                    "message": "Bad Request"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "BadRequest": {
+                "description": "Bad Request",
+                "content": {
+                    "application/json": {
+                        "examples": {
+                            "Bad Request": {
+                                "value": {
+                                    "message": "Bad Request"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "Unauthorized": {
+                "description": "Unauthorized",
+                "content": {
+                    "application/json": {
+                        "examples": {
+                            "Unauthorized": {
+                                "value": {
+                                    "message": "Unauthorized"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "paths": {
+        "/auth/register": {
+            "post": {
+                "summary": "Register",
+                "description": "Endpoint to register account",
+                "operationId": "register",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "email@email.com"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "MyPassword1!"
+                                    }
+                                }
+                            },
+                            "examples": {
+                                "Register": {
+                                    "value": {
+                                        "email": "email@email.com",
+                                        "name": "John Doe",
+                                        "password": "MyPassword1!"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Register Response": {
+                                        "value": {
+                                            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzU4MzQ1ODgsInN1YiI6IjY3NmMzMDczYWY2NWVjOTkyMjM5NDY4YyIsInR5cGUiOiJhY2Nlc3MifQ.BRKqwzcJ-cKY-uVdjQUokktxucjzhA0e9SA9TOyPDnM",
+                                            "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzUzMTYxODgsInN1YiI6IjY3NmMzMDczYWY2NWVjOTkyMjM5NDY4YyIsInR5cGUiOiJyZWZyZXNoIn0.uqWPh9WQ1DLfy6uE4vqgZZ4MwAKeDQAqM3o49arfN0c"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    }
+                },
+                "tags": [
+                    "Authentication"
+                ]
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "summary": "Login",
+                "description": "Login",
+                "operationId": "login",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "email@email.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "MyPassword1!"
+                                    }
+                                }
+                            },
+                            "examples": {
+                                "Login": {
+                                    "value": {
+                                        "email": "email@email.com",
+                                        "password": "MyPassword1!"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Login Response": {
+                                        "value": {
+                                            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzU4MzQ1ODgsInN1YiI6IjY3NmMzMDczYWY2NWVjOTkyMjM5NDY4YyIsInR5cGUiOiJhY2Nlc3MifQ.BRKqwzcJ-cKY-uVdjQUokktxucjzhA0e9SA9TOyPDnM",
+                                            "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzUzMTYxODgsInN1YiI6IjY3NmMzMDczYWY2NWVjOTkyMjM5NDY4YyIsInR5cGUiOiJyZWZyZXNoIn0.uqWPh9WQ1DLfy6uE4vqgZZ4MwAKeDQAqM3o49arfN0c"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    }
+                },
+                "tags": [
+                    "Authentication"
+                ]
+            }
+        },
+        "/template": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "summary": "Get Template",
+                "description": "Get Template API for both single request or paginated request",
+                "operationId": "GetTemplate",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "MjQZD"
+                        },
+                        "description": "This will use pagination cursor provided by the response"
+                    },
+                    {
+                        "in": "query",
+                        "name": "name",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "generic"
+                        },
+                        "description": "Name of the template it will be used as wild card search"
+                    },
+                    {
+                        "in": "query",
+                        "name": "name_or_content",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "generic"
+                        },
+                        "description": "The value for name or content match this value"
+                    },
+                    {
+                        "in": "query",
+                        "name": "language",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "id"
+                        },
+                        "description": "The languages that are available for each template. For language reference please check here <a href='https://developers.facebook.com/docs/whatsapp/business-management-api/message-templates/supported-languages/'>https://developers.facebook.com/docs/whatsapp/business-management-api/message-templates/supported-languages/</a>"
+                    },
+                    {
+                        "in": "query",
+                        "name": "category",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ACCOUNT_UPDATE",
+                                "PAYMENT_UPDATE",
+                                "PERSONAL_FINANCE_UPDATE",
+                                "SHIPPING_UPDATE",
+                                "RESERVATION_UPDATE",
+                                "ISSUE_RESOLUTION",
+                                "APPOINTMENT_UPDATE",
+                                "TRANSPORTATION_UPDATE",
+                                "TICKET_UPDATE",
+                                "ALERT_UPDATE",
+                                "AUTO_REPLY",
+                                "TRANSACTIONAL",
+                                "OTP",
+                                "UTILITY",
+                                "MARKETING",
+                                "AUTHENTICATION"
+                            ],
+                            "example": "UTILITY"
+                        },
+                        "description": "The category for a template"
+                    },
+                    {
+                        "in": "query",
+                        "name": "status",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "APPROVED",
+                                "IN_APPEAL",
+                                "PENDING",
+                                "REJECTED",
+                                "PENDING_DELETION",
+                                "DELETED",
+                                "DISABLED",
+                                "PAUSED",
+                                "LIMIT_EXCEEDED",
+                                "ARCHIVED"
+                            ],
+                            "example": "APPROVED"
+                        },
+                        "description": "The status for a template"
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 25,
+                            "example": 10
+                        },
+                        "description": "The limit for each request"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Login Response": {
+                                        "value": {
+                                            "data": [
+                                                {
+                                                    "name": "test_otp",
+                                                    "parameter_format": "POSITIONAL",
+                                                    "components": [
+                                                        {
+                                                            "type": "BODY",
+                                                            "text": "*{{1}}* is your verification code. For your security, do not share this code.",
+                                                            "example": {
+                                                                "body_text": [
+                                                                    [
+                                                                        "123456"
+                                                                    ]
+                                                                ]
+                                                            }
+                                                        },
+                                                        {
+                                                            "type": "FOOTER",
+                                                            "text": "This code expires in 10 minutes."
+                                                        },
+                                                        {
+                                                            "type": "BUTTONS",
+                                                            "buttons": [
+                                                                {
+                                                                    "type": "URL",
+                                                                    "text": "Copy code"
+                                                                }
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "language": "en",
+                                                    "status": "APPROVED",
+                                                    "category": "AUTHENTICATION",
+                                                    "id": "1228257214959116"
+                                                }
+                                            ],
+                                            "pagination": {
+                                                "before": "MAZDZD",
+                                                "after": "MAZDZD"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Bad Request": {
+                                        "value": {
+                                            "message": "Bad Request"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    }
+                },
+                "tags": [
+                    "Template"
+                ]
+            }
+        }
+    },
+    "tags": []
+}

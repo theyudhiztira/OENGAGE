@@ -90,7 +90,11 @@ func (r *templateService) parseTemplateQueryUrl(params map[string][]string) (str
 
 	query := u.Query()
 	for key, value := range params {
-		query.Add(key, value[0])
+		if key == "page" {
+			query.Add("after", value[0])
+		} else {
+			query.Add(key, value[0])
+		}
 	}
 	u.RawQuery = query.Encode()
 

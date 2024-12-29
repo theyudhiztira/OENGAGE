@@ -36,18 +36,18 @@ var validate = validator.New()
 
 func (r *authService) CreateUser(c *gin.Context) {
 	if err := c.ShouldBindJSON(&registerDTO); err != nil {
-		c.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
 	if err := validate.Struct(registerDTO); err != nil {
-		c.JSON(http.StatusBadGateway, gin.H{"message": err.(validator.ValidationErrors)[0].Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.(validator.ValidationErrors)[0].Error()})
 		return
 	}
 
 	checkEmail := r.DB.Collection("users").FindOne(*r.Ctx, bson.M{"email": registerDTO.Email})
 	if raw, err := checkEmail.Raw(); err == nil && raw != nil {
-		c.JSON(http.StatusBadGateway, gin.H{"message": "Bad Request"})
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Bad Request"})
 		return
 	}
 
@@ -73,18 +73,18 @@ func (r *authService) Login(c *gin.Context) {
 	var loginDTO dto.LoginDTO
 
 	if err := c.ShouldBindJSON(&loginDTO); err != nil {
-		c.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
 	if err := validate.Struct(loginDTO); err != nil {
-		c.JSON(http.StatusBadGateway, gin.H{"message": err.(validator.ValidationErrors)[0].Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.(validator.ValidationErrors)[0].Error()})
 		return
 	}
 
 	user := r.DB.Collection("users").FindOne(*r.Ctx, bson.M{"email": loginDTO.Email})
 	if user.Err() != nil {
-		c.JSON(http.StatusBadGateway, gin.H{"message": "Incorrect email or password"})
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Incorrect email or password"})
 		return
 	}
 
@@ -95,7 +95,7 @@ func (r *authService) Login(c *gin.Context) {
 	}
 
 	if !comparePassword(userObj.Password, loginDTO.Password) {
-		c.JSON(http.StatusBadGateway, gin.H{"message": "Incorrect email or password"})
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Incorrect email or password"})
 		return
 	}
 

@@ -11,8 +11,8 @@ func InitRedis() *redis.Client {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	rc := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "51I46CLtbHSkpDzL69MarN1L3n1",
+		Addr:     AppEnv().REDIS_HOST,
+		Password: AppEnv().REDIS_PASS,
 	})
 
 	ping := rc.Ping(ctx)

@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -95,4 +96,10 @@ type SystemSetupRequest struct {
 	AdminPassword  string `json:"admin_password" binding:"required,min=8"`
 	WhatsappToken  string `json:"whatsapp_token" binding:"required"`
 	WhatsappWabaID string `json:"whatsapp_waba_id" binding:"required"`
+}
+
+type JwtClaims struct {
+	Type string `json:"type"`
+	Role string `json:"role"`
+	jwt.RegisteredClaims
 }

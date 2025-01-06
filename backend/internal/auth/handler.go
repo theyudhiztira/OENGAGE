@@ -2,7 +2,6 @@ package auth
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"theyudhiztira/oengage-backend/internal/pkg"
 
@@ -19,7 +18,6 @@ func NewAuthHandler(ctx *context.Context, service authService) *authHandler {
 func (r *authHandler) SetupSystem(c *gin.Context) {
 	var rData SystemSetupRequest
 	if err := c.ShouldBindJSON(&rData); err != nil {
-		log.Println(err)
 		c.JSON(http.StatusBadRequest, pkg.ApiResponse{
 			Message: pkg.BadRequest,
 			Status:  false,
@@ -29,7 +27,6 @@ func (r *authHandler) SetupSystem(c *gin.Context) {
 
 	result, err := r.Service.SetupSystem(rData)
 	if err != nil {
-		log.Println(err)
 		c.JSON(http.StatusInternalServerError, pkg.ApiResponse{
 			Message: pkg.InternalServerError,
 			Status:  false,

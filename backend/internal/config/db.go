@@ -3,8 +3,11 @@ package config
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
+	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/event"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -24,6 +27,16 @@ func DBConnect() *mongo.Client {
 	clientOpts := options.Client()
 	clientOpts.SetMaxPoolSize(10)
 	clientOpts.ApplyURI(dbURI)
+
+	if gin.Mode() != gin.ReleaseMode {
+		cmdMonitor := &event.CommandMonitor{
+			Started: func(_ context.Context, evt *event.CommandStartedEvent) {
+				log.Println("MongoDB Debug", evt.Command)
+			},
+		}
+
+		clientOpts.SetMonitor(cmdMonitor)
+	}
 
 	dbClient, err := mongo.Connect(ctx, clientOpts)
 	if err != nil {

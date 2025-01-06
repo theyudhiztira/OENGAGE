@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"theyudhiztira/oengage-backend/internal/pkg"
 	"time"
@@ -61,7 +60,6 @@ func (tr *templateRepository) GetWhatsappConfig() (pkg.SystemConfig, error) {
 }
 
 func (r *templateRepository) GetWhatsappTemplate(url string, token string) (MetaTemplateResponse, error) {
-	log.Print(url)
 	req, reqErr := http.NewRequest("GET", url, nil)
 	if reqErr != nil {
 		return MetaTemplateResponse{}, reqErr

@@ -48,6 +48,7 @@ type SystemConfig struct {
 
 var RolesSeeder = []Role{
 	{
+		ID:   GetAdminRoleObjID(),
 		Role: "admin",
 		Permissions: []Permission{
 			{

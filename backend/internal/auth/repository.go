@@ -2,7 +2,6 @@ package auth
 
 import (
 	"context"
-	"log"
 	"theyudhiztira/oengage-backend/internal/pkg"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -68,7 +67,6 @@ func (r *authRepository) UpdateSystemSettings(d pkg.SystemConfig) error {
 	})
 
 	if err != nil {
-		log.Print(err)
 		return err
 	}
 

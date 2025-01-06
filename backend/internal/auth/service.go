@@ -118,10 +118,8 @@ func hashPassword(password string) string {
 }
 
 func comparePassword(hashedPassword, password string) bool {
-	log.Printf("hashedPassword: %v, password: %v", hashedPassword, password)
 	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 	if err != nil {
-		log.Println("Error in comparing password: ", err)
 		return false
 	}
 	return true

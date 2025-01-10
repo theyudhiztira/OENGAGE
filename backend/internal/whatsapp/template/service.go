@@ -18,9 +18,9 @@ func (s *templateService) GetTemplate(q TemplateQueryParam) (interface{}, error)
 		return nil, err
 	}
 
-	urlStr, parseErr := parseTemplateQueryURL(q, sc.WhatsappWabaID)
-	if parseErr != nil {
-		return nil, parseErr
+	urlStr, err := parseTemplateQueryURL(q, sc.WhatsappWabaID)
+	if err != nil {
+		return nil, err
 	}
 
 	res, err := s.Repository.GetWhatsappTemplate(urlStr, sc.WhatsappToken)

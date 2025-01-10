@@ -18,6 +18,8 @@ type templateHandler struct {
 }
 
 type TemplateService interface {
+	CreateTemplate(req CreateTemplateRequest) (WhatsappTemplate, error)
+	GetTemplate(q TemplateQueryParam) (MetaTemplateResponse, error)
 }
 
 type templateService struct {
@@ -43,18 +45,31 @@ type TemplateQueryParam struct {
 }
 
 type WhatsappTemplate struct {
-	Name                  string      `json:"name"`
+	Name                  string      `json:"name" binding:"required"`
 	ParameterFormat       string      `json:"parameter_format"`
-	Components            []Component `json:"components"`
-	Language              string      `json:"language"`
-	Status                string      `json:"status"`
-	Category              string      `json:"category"`
-	ID                    string      `json:"id"`
+	Components            []Component `json:"components" binding:"required"`
+	Language              string      `json:"language" binding:"required"`
+	Status                string      `json:"status" binding:"required"`
+	Category              string      `json:"category" binding:"required"`
+	ID                    string      `json:"id,omitempty"`
 	MessageSendTTLSeconds int         `json:"message_send_ttl_seconds,omitempty"`
+	AllowCategoryChange   string      `json:"allow_category_change,omitempty"`
+}
+
+type CreateTemplateRequest struct {
+	Name                string `form:"name" binding:"required"`
+	Header              string `form:"header" binding:"omitempty,json"`
+	Body                string `form:"body" binding:"required,json"`
+	Footer              string `form:"footer" binding:"omitempty,json"`
+	Button              string `form:"button" binding:"omitempty,json"`
+	Carousel            string `form:"carousel" binding:"omitempty,json"`
+	AllowCategoryChange string `form:"allow_category_change" binding:"required"`
+	Language            string `form:"language" binding:"required"`
+	Category            string `form:"category" binding:"required,oneof=MARKETING UTILITY AUTHENTICATION"`
 }
 
 type Component struct {
-	Type                      string   `json:"type"`
+	Type                      string   `json:"type,omitempty" binding:"oneof=HEADER BODY FOOTER BUTTON CAROUSEL"`
 	Format                    string   `json:"format,omitempty"`
 	Text                      string   `json:"text,omitempty"`
 	Example                   *Example `json:"example,omitempty"`
@@ -95,7 +110,22 @@ type Paging struct {
 	Next    string `json:"next,omitempty"`
 	Before  string `json:"before,omitempty"`
 }
+
 type Cursor struct {
 	Before string `json:"before"`
 	After  string `json:"after"`
+}
+
+type WhatsappTemplateErrorResp struct {
+	Error MetaError `json:"error"`
+}
+
+type MetaError struct {
+	Message        string `json:"message"`
+	Type           string `json:"type"`
+	Code           int    `json:"code"`
+	FBT            string `json:"fbfbtrace_idt"`
+	SubCode        int    `json:"error_subcode,ommitempty"`
+	IsTransient    bool   `json:"is_transient,omitempty"`
+	ErrorUserTitle string `json:"error_user_title,omitempty"`
 }

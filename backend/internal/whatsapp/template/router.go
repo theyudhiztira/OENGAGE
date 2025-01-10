@@ -19,7 +19,7 @@ func Router(r *gin.RouterGroup, db *mongo.Database, rds *redis.Client, ctx *cont
 	templateRouter := r.Group("/template")
 	{
 		templateRouter.GET("", authMiddleware.CheckCredential(module), handler.GetTemplate)
-		templateRouter.POST("", authMiddleware.CheckCredential(module), handler.GetTemplate)
+		templateRouter.POST("", authMiddleware.CheckCredential(module), handler.CreateTemplate)
 	}
 
 	return templateRouter

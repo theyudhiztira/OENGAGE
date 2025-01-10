@@ -31,6 +31,20 @@ func (s *templateService) GetTemplate(q TemplateQueryParam) (interface{}, error)
 	return res, nil
 }
 
+func (s *templateService) CreateTemplate(payload WhatsappTemplate) (MetaTemplateResponse, error) {
+	sc, err := s.Repository.GetWhatsappConfig()
+	if err != nil {
+		return MetaTemplateResponse{}, err
+	}
+
+	res, err := s.Repository.CreateTemplate(sc, payload)
+	if err != nil {
+		return MetaTemplateResponse{}, err
+	}
+
+	return res, nil
+}
+
 func parseTemplateQueryURL(params TemplateQueryParam, wabaID string) (string, error) {
 	baseURL := fmt.Sprintf("https://graph.facebook.com/v21.0/%s/message_templates", wabaID)
 	u, err := url.Parse(baseURL)

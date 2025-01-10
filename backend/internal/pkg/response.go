@@ -1,5 +1,7 @@
 package pkg
 
+import "github.com/gin-gonic/gin"
+
 type ApiResponse struct {
 	Data    interface{} `json:"data,omitempty"`
 	Message string      `json:"message,omitempty"`
@@ -25,3 +27,11 @@ const (
 	InternalServerError = "Internal Server Error"
 	Forbidden           = "Forbidden"
 )
+
+func ErrorResp(err error) interface{} {
+	if gin.Mode() == gin.DebugMode {
+		return err.Error()
+	}
+
+	return nil
+}

@@ -2,8 +2,9 @@ package template
 
 import (
 	"fmt"
-	"net/url"
+	"log"
 	"reflect"
+	"theyudhiztira/oengage-backend/internal/whatsapp"
 )
 
 func NewTemplateService(r *templateRepository) *templateService {
@@ -18,42 +19,45 @@ func (s *templateService) GetTemplate(q TemplateQueryParam) (interface{}, error)
 		return nil, err
 	}
 
-	urlStr, err := parseTemplateQueryURL(q, sc.WhatsappWabaID)
+	query := buildQueryParams(q)
+
+	res, err := whatsapp.Get("message_templates", query, whatsapp.WhatsappConfig{
+		WhatsappBusinesID: sc.WhatsappWabaID,
+		WhatsappToken:     sc.WhatsappToken,
+	})
 	if err != nil {
+		log.Println("[TemplateService.GetTemplate] Failed to get template", err)
 		return nil, err
 	}
 
-	res, err := s.Repository.GetWhatsappTemplate(urlStr, sc.WhatsappToken)
-	if err != nil {
-		return nil, err
-	}
-
-	return res, nil
+	return res.GetTemplate, nil
 }
 
-func (s *templateService) CreateTemplate(payload WhatsappTemplate) (MetaTemplateResponse, error) {
+func (s *templateService) CreateTemplate(payload WhatsappTemplate) (MetaCreateTemplateResponse, error) {
 	sc, err := s.Repository.GetWhatsappConfig()
 	if err != nil {
-		return MetaTemplateResponse{}, err
+		return MetaCreateTemplateResponse{}, err
 	}
 
-	res, err := s.Repository.CreateTemplate(sc, payload)
+	res, err := whatsapp.Post("message_templates", payload, whatsapp.WhatsappConfig{
+		WhatsappBusinesID: sc.WhatsappWabaID,
+		WhatsappToken:     sc.WhatsappToken,
+	})
 	if err != nil {
-		return MetaTemplateResponse{}, err
+		log.Println("[TemplateService.CreateTemplate] Failed to create template", err)
+		return MetaCreateTemplateResponse{}, err
 	}
 
-	return res, nil
+	return MetaCreateTemplateResponse{
+		ID:       res.CreateTemplate.ID,
+		Status:   res.CreateTemplate.Status,
+		Category: res.CreateTemplate.Category,
+	}, nil
 }
 
-func parseTemplateQueryURL(params TemplateQueryParam, wabaID string) (string, error) {
-	baseURL := fmt.Sprintf("https://graph.facebook.com/v21.0/%s/message_templates", wabaID)
-	u, err := url.Parse(baseURL)
-	if err != nil {
-		return "", err
-	}
-	query := u.Query()
-
-	v := reflect.ValueOf(params)
+func buildQueryParams(q TemplateQueryParam) map[string]string {
+	query := make(map[string]string)
+	v := reflect.ValueOf(q)
 	for i := 0; i < v.NumField(); i++ {
 		field := v.Type().Field(i)
 		key := field.Tag.Get("form")
@@ -62,10 +66,8 @@ func parseTemplateQueryURL(params TemplateQueryParam, wabaID string) (string, er
 		}
 		value := v.Field(i).Interface()
 		if value != "" {
-			query.Set(key, fmt.Sprintf("%v", value))
+			query[key] = fmt.Sprintf("%v", value)
 		}
 	}
-
-	u.RawQuery = query.Encode()
-	return u.String(), nil
+	return query
 }

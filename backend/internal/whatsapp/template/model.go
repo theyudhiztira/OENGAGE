@@ -100,6 +100,7 @@ type TemplateResponseDto struct {
 	Data       interface{} `json:"data"`
 	Pagination Cursor      `json:"pagination"`
 }
+
 type MetaTemplateResponse struct {
 	Data   []WhatsappTemplate `json:"data"`
 	Paging Paging             `json:"paging"`
@@ -128,4 +129,10 @@ type MetaError struct {
 	SubCode        int    `json:"error_subcode,ommitempty"`
 	IsTransient    bool   `json:"is_transient,omitempty"`
 	ErrorUserTitle string `json:"error_user_title,omitempty"`
+}
+
+type MetaCreateTemplateResponse struct {
+	ID       string `json:"id"`
+	Status   string `json:"status"`
+	Category string `json:"category"`
 }

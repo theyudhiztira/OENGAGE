@@ -3,12 +3,6 @@ package template
 import (
 	"context"
 	"encoding/json"
-	"errors"
-	"fmt"
-	"io"
-	"log"
-	"net/http"
-	"strings"
 	"theyudhiztira/oengage-backend/internal/pkg"
 	"time"
 
@@ -67,93 +61,4 @@ func (tr *templateRepository) fetchAndCacheWhatsappConfig() (pkg.SystemConfig, e
 	}
 
 	return sysConf, nil
-}
-
-func (r *templateRepository) GetWhatsappTemplate(url, token string) (MetaTemplateResponse, error) {
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return MetaTemplateResponse{}, err
-	}
-
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return MetaTemplateResponse{}, err
-	}
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return MetaTemplateResponse{}, err
-	}
-
-	if resp.StatusCode != http.StatusOK {
-		return MetaTemplateResponse{}, fmt.Errorf("failed to get template from %s", url)
-	}
-
-	var result MetaTemplateResponse
-	if err := json.Unmarshal(body, &result); err != nil {
-		return MetaTemplateResponse{}, err
-	}
-
-	return result, nil
-}
-
-func (r *templateRepository) CreateTemplate(sysConf pkg.SystemConfig, payload WhatsappTemplate) (MetaTemplateResponse, error) {
-	urlStr := fmt.Sprintf("https://graph.facebook.com/v21.0/%s/message_templates", sysConf.WhatsappWabaID)
-
-	jsonBody, err := json.Marshal(payload)
-	if err != nil {
-		log.Println("Failed to marshal request body:", err)
-		return MetaTemplateResponse{}, err
-	}
-
-	req, err := http.NewRequest("POST", urlStr, io.NopCloser(strings.NewReader(string(jsonBody))))
-	if err != nil {
-		return MetaTemplateResponse{}, err
-	}
-
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", sysConf.WhatsappToken))
-	req.Header.Add("Content-Type", "application/json")
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return MetaTemplateResponse{}, err
-	}
-	defer resp.Body.Close()
-
-	respBody, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return MetaTemplateResponse{}, err
-	}
-
-	if resp.StatusCode != http.StatusOK {
-		return r.handleTemplateError(respBody)
-	}
-
-	var result MetaTemplateResponse
-	if err := json.Unmarshal(respBody, &result); err != nil {
-		return MetaTemplateResponse{}, err
-	}
-
-	return result, nil
-}
-
-func (r *templateRepository) handleTemplateError(respBody []byte) (MetaTemplateResponse, error) {
-	var errResp WhatsappTemplateErrorResp
-	if err := json.Unmarshal(respBody, &errResp); err != nil {
-		return MetaTemplateResponse{}, err
-	}
-
-	var metaError error
-	if errResp.Error.ErrorUserTitle != "" {
-		metaError = errors.New(errResp.Error.ErrorUserTitle)
-	} else {
-		metaError = errors.New(errResp.Error.Message)
-	}
-
-	return MetaTemplateResponse{}, metaError
 }

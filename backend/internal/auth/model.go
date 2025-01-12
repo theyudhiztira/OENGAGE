@@ -91,11 +91,9 @@ type Module struct {
 }
 
 type SystemSetupRequest struct {
-	AdminName      string `json:"admin_name" binding:"required"`
-	AdminEmail     string `json:"admin_email" binding:"required,email"`
-	AdminPassword  string `json:"admin_password" binding:"required,min=8"`
-	WhatsappToken  string `json:"whatsapp_token" binding:"required"`
-	WhatsappWabaID string `json:"whatsapp_waba_id" binding:"required"`
+	AdminName     string `json:"admin_name" binding:"required"`
+	AdminEmail    string `json:"admin_email" binding:"required,email"`
+	AdminPassword string `json:"admin_password" binding:"required,min=8"`
 }
 
 type JwtClaims struct {

@@ -31,19 +31,6 @@ func (s *authService) SetupSystem(d SystemSetupRequest) (JwtPair, error) {
 		return JwtPair{}, err
 	}
 
-	sysConf, err := s.Repository.GetSystemSettings()
-	if err != nil {
-		return JwtPair{}, err
-	}
-
-	sysConf.WhatsappWabaID = d.WhatsappWabaID
-	sysConf.WhatsappToken = d.WhatsappToken
-
-	updateSysConf := s.Repository.UpdateSystemSettings(sysConf)
-	if updateSysConf != nil {
-		return JwtPair{}, err
-	}
-
 	return res, err
 }
 

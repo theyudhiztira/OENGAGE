@@ -5,6 +5,7 @@ import (
 	"theyudhiztira/oengage-backend/internal/auth"
 	"theyudhiztira/oengage-backend/internal/config"
 	"theyudhiztira/oengage-backend/internal/pkg"
+	"theyudhiztira/oengage-backend/internal/whatsapp"
 	"theyudhiztira/oengage-backend/internal/whatsapp/template"
 	"time"
 
@@ -42,6 +43,7 @@ func InitServer() *gin.Engine {
 	{
 		auth.Router(routerV1, db, &ctx)
 		template.Router(routerV1, db, redis, &ctx)
+		whatsapp.Router(routerV1, db, redis, &ctx)
 	}
 
 	srv.Run(env.OENGAGE_BACKEND_ADDRESS)

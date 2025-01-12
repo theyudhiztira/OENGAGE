@@ -52,7 +52,24 @@ var RolesSeeder = []Role{
 		Role: "admin",
 		Permissions: []Permission{
 			{
+				ID:     primitive.NewObjectID(),
 				Module: "users",
+				PermissionRule: ReadWritePermission{
+					Read:  true,
+					Write: true,
+				},
+			},
+			{
+				ID:     primitive.NewObjectID(),
+				Module: "whatsapp",
+				PermissionRule: ReadWritePermission{
+					Read:  true,
+					Write: true,
+				},
+			},
+			{
+				ID:     primitive.NewObjectID(),
+				Module: "template",
 				PermissionRule: ReadWritePermission{
 					Read:  true,
 					Write: true,
@@ -70,6 +87,16 @@ var ModulesSeeder = []Module{
 		Name:        "Users",
 		Description: "Module for managing users",
 		Path:        "/users",
+	},
+	{
+		Name:        "Whatsapp",
+		Description: "Module for managing whatsapp",
+		Path:        "/whatsapp",
+	},
+	{
+		Name:        "Template",
+		Description: "Module for managing whatsapp templates",
+		Path:        "/template",
 	},
 }
 

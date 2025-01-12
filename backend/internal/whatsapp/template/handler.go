@@ -3,7 +3,6 @@ package template
 import (
 	"context"
 	"encoding/json"
-	"log"
 	"net/http"
 	"theyudhiztira/oengage-backend/internal/pkg"
 
@@ -66,7 +65,6 @@ func (h *templateHandler) CreateTemplate(c *gin.Context) {
 		if componentString != "" {
 			component, err := h.ParseComponent(c, componentString)
 			if err != nil {
-				log.Print(err)
 				c.JSON(http.StatusBadRequest, pkg.ApiResponse{
 					Message: pkg.BadRequest,
 					Status:  false,
@@ -82,7 +80,6 @@ func (h *templateHandler) CreateTemplate(c *gin.Context) {
 	}
 
 	if _, err := h.Service.CreateTemplate(p); err != nil {
-		log.Print(err)
 		c.JSON(http.StatusInternalServerError, pkg.ApiResponse{
 			Message: err.Error(),
 			Status:  false,

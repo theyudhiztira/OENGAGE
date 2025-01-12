@@ -95,4 +95,26 @@ var DBCollections = []CollectionIndex{
 			},
 		},
 	},
+	{
+		CollectionName: "whatsapp_configs",
+		Indexes: [][]Index{
+			{
+				{
+					Key:     "whatsapp_phone_number",
+					Value:   1,
+					Options: map[string]interface{}{},
+				},
+				{
+					Key:     "createdAt",
+					Value:   -1,
+					Options: map[string]interface{}{},
+				},
+				{
+					Key:     "updatedAt",
+					Value:   -1,
+					Options: map[string]interface{}{},
+				},
+			},
+		},
+	},
 }

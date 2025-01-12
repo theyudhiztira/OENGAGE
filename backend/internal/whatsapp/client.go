@@ -83,8 +83,13 @@ type WhatsappClientResponse struct {
 	CapiError   struct {
 		Error CloudApiErrorResponse `json:"error"`
 	}
-	CreateTemplate CreateTemplateResponse
-	GetTemplate    MetaTemplateResponse
+	CreateTemplate      CreateTemplateResponse
+	GetTemplate         MetaTemplateResponse
+	PhoneNumberResponse WhatsappPhoneNumberResponse
+}
+
+type WhatsappPhoneNumberResponse struct {
+	Data []WhatsappPhoneNumber `json:"data"`
 }
 
 type CreateTemplateResponse struct {
@@ -108,13 +113,13 @@ type CloudApiErrorResponse struct {
 	ErrorUserMsg   string `json:"error_user_msg,omitempty"`
 }
 
-type WhatsappConfig struct {
+type WhatsappClientParam struct {
 	WhatsappBusinesID     string `json:"whatsapp_business_id"`
 	WhatsappPhoneNumberID string `json:"whatsapp_phone_number"`
 	WhatsappToken         string `json:"whatsapp_token"`
 }
 
-func Post(path string, body any, config WhatsappConfig) (WhatsappClientResponse, error) {
+func Post(path string, body any, config WhatsappClientParam) (WhatsappClientResponse, error) {
 	url := buildURL(config, path)
 
 	jsonBody, err := json.Marshal(body)
@@ -151,7 +156,7 @@ func Post(path string, body any, config WhatsappConfig) (WhatsappClientResponse,
 	return WhatsappClientResponse{}, nil
 }
 
-func Get(path string, query map[string]string, config WhatsappConfig) (WhatsappClientResponse, error) {
+func Get(path string, query map[string]string, config WhatsappClientParam) (WhatsappClientResponse, error) {
 	url := buildURL(config, path)
 
 	url, err := ParseQueryParam(url, query)
@@ -246,12 +251,17 @@ func ParseResponse(method string, path string, resp []byte) (WhatsappClientRespo
 			log.Println("[Whatsapp.ParseResponse] JSON Unmarshal failed", err)
 			return WhatsappClientResponse{}, err
 		}
+	case "phone_numbers":
+		if err := json.Unmarshal(resp, &result.PhoneNumberResponse); err != nil {
+			log.Println("[Whatsapp.ParseResponse] JSON Unmarshal failed", err)
+			return WhatsappClientResponse{}, err
+		}
 	}
 
 	return result, nil
 }
 
-func buildURL(config WhatsappConfig, path string) string {
+func buildURL(config WhatsappClientParam, path string) string {
 	if config.WhatsappPhoneNumberID != "" {
 		return fmt.Sprintf("https://graph.facebook.com/v21.0/%s/%s", config.WhatsappPhoneNumberID, path)
 	}

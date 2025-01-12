@@ -2,9 +2,7 @@ package pkg
 
 import (
 	"context"
-	"encoding/json"
 	"log"
-	"os"
 	"reflect"
 	"time"
 
@@ -45,21 +43,6 @@ func Migrate(db *mongo.Database) (bool, error) {
 	}
 
 	return true, nil
-}
-
-func LoadMigrationJSON() ([]CollectionIndex, error) {
-	file, err := os.ReadFile("./migration/migration.json")
-	if err != nil {
-		return nil, err
-	}
-
-	var collectionIndexes []CollectionIndex
-	err = json.Unmarshal(file, &collectionIndexes)
-	if err != nil {
-		return nil, err
-	}
-
-	return collectionIndexes, nil
 }
 
 func MigrateCollection(db *mongo.Database, c CollectionIndex) (bool, error) {

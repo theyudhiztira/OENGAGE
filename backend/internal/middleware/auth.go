@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"log"
 	"net/http"
 	"strings"
 	"theyudhiztira/oengage-backend/internal/auth"
@@ -84,6 +85,7 @@ func (m *AuthMiddleware) checkPermission(roleID, moduleName, method string) bool
 	}
 
 	for _, perm := range role.Permissions {
+		log.Println(perm.Module, moduleName, perm.PermissionRule.Read, perm.PermissionRule.Write)
 		if perm.Module == moduleName {
 			if method == "GET" {
 				return perm.PermissionRule.Read

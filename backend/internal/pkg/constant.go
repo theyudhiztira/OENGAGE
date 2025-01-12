@@ -5,5 +5,6 @@ const (
 )
 
 const (
-	SystemConfigCacheKey = "system_config"
+	SystemConfigCacheKey   = "system_config"
+	WhatsappConfigCacheKey = "whatsapp_config"
 )

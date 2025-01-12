@@ -14,16 +14,17 @@ func NewTemplateService(r *templateRepository) *templateService {
 }
 
 func (s *templateService) GetTemplate(q TemplateQueryParam) (interface{}, error) {
-	sc, err := s.Repository.GetWhatsappConfig()
+	waRepo := whatsapp.NewWhatsappRepository(s.Repository.DB, s.Repository.Ctx, s.Repository.Redis)
+	wc, err := waRepo.GetWhatsappConfig()
 	if err != nil {
 		return nil, err
 	}
 
 	query := buildQueryParams(q)
 
-	res, err := whatsapp.Get("message_templates", query, whatsapp.WhatsappConfig{
-		WhatsappBusinesID: sc.WhatsappWabaID,
-		WhatsappToken:     sc.WhatsappToken,
+	res, err := whatsapp.Get("message_templates", query, whatsapp.WhatsappClientParam{
+		WhatsappBusinesID: wc.WhatsappBusinesID,
+		WhatsappToken:     wc.WhatsappToken,
 	})
 	if err != nil {
 		log.Println("[TemplateService.GetTemplate] Failed to get template", err)
@@ -34,14 +35,15 @@ func (s *templateService) GetTemplate(q TemplateQueryParam) (interface{}, error)
 }
 
 func (s *templateService) CreateTemplate(payload WhatsappTemplate) (MetaCreateTemplateResponse, error) {
-	sc, err := s.Repository.GetWhatsappConfig()
+	waRepo := whatsapp.NewWhatsappRepository(s.Repository.DB, s.Repository.Ctx, s.Repository.Redis)
+	wc, err := waRepo.GetWhatsappConfig()
 	if err != nil {
 		return MetaCreateTemplateResponse{}, err
 	}
 
-	res, err := whatsapp.Post("message_templates", payload, whatsapp.WhatsappConfig{
-		WhatsappBusinesID: sc.WhatsappWabaID,
-		WhatsappToken:     sc.WhatsappToken,
+	res, err := whatsapp.Post("message_templates", payload, whatsapp.WhatsappClientParam{
+		WhatsappBusinesID: wc.WhatsappBusinesID,
+		WhatsappToken:     wc.WhatsappToken,
 	})
 	if err != nil {
 		log.Println("[TemplateService.CreateTemplate] Failed to create template", err)

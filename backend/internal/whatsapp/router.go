@@ -16,11 +16,11 @@ func Router(r *gin.RouterGroup, db *mongo.Database, rds *redis.Client, ctx *cont
 	module := "whatsapp"
 	authMiddleware := middleware.NewAuthMiddleware(*db, *rds, *ctx)
 
-	templateRouter := r.Group("/whatsapp")
+	whatsappRouter := r.Group("/whatsapp")
 	{
-		templateRouter.POST("/config", authMiddleware.CheckCredential(module), handler.ConfigHandler)
-		// templateRouter.POST("", authMiddleware.CheckCredential(module), handler.CreateTemplate)
+		whatsappRouter.POST("/config", authMiddleware.CheckCredential(module), handler.ConfigHandler)
+		// whatsappRouter.POST("", authMiddleware.CheckCredential(module), handler.CreateTemplate)
 	}
 
-	return templateRouter
+	return whatsappRouter
 }

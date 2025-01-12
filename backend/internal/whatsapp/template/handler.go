@@ -79,7 +79,8 @@ func (h *templateHandler) CreateTemplate(c *gin.Context) {
 		}
 	}
 
-	if _, err := h.Service.CreateTemplate(p); err != nil {
+	create, err := h.Service.CreateTemplate(p)
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, pkg.ApiResponse{
 			Message: err.Error(),
 			Status:  false,
@@ -88,8 +89,8 @@ func (h *templateHandler) CreateTemplate(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, pkg.ApiResponse{
-		Message: "Nice",
-		Status:  true,
+		Data:   create,
+		Status: true,
 	})
 }
 

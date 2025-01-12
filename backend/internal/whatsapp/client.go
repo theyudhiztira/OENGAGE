@@ -151,9 +151,13 @@ func Post(path string, body any, config WhatsappClientParam) (WhatsappClientResp
 		return WhatsappClientResponse{}, HandleError(respBody)
 	}
 
-	log.Println(string(respBody))
+	result, err := ParseResponse("POST", path, respBody)
+	if err != nil {
+		log.Println("[Whatsapp.POST] Failed to parse response", err)
+		return WhatsappClientResponse{}, err
+	}
 
-	return WhatsappClientResponse{}, nil
+	return result, nil
 }
 
 func Get(path string, query map[string]string, config WhatsappClientParam) (WhatsappClientResponse, error) {

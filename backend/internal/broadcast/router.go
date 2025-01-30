@@ -21,11 +21,7 @@ func Router(r *gin.RouterGroup, db *mongo.Database, rds *redis.Client, ctx *cont
 
 	broadcastRouter := r.Group("/broadcast")
 	{
-		broadcastRouter.POST("", authMiddleware.CheckCredential(module), func(c *gin.Context) {
-			c.JSON(200, gin.H{
-				"message": "OK",
-			})
-		})
+		broadcastRouter.POST("", authMiddleware.CheckCredential(module), handler.CreateBroadcast)
 	}
 
 	return broadcastRouter

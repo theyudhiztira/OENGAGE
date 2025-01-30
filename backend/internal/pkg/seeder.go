@@ -75,6 +75,14 @@ var RolesSeeder = []Role{
 					Write: true,
 				},
 			},
+			{
+				ID:     primitive.NewObjectID(),
+				Module: "broadcast",
+				PermissionRule: ReadWritePermission{
+					Read:  true,
+					Write: true,
+				},
+			},
 		},
 		CreatedBy:  seederCreatedByObjID,
 		CreeatedAt: time.Now(),
@@ -97,6 +105,11 @@ var ModulesSeeder = []Module{
 		Name:        "Template",
 		Description: "Module for managing whatsapp templates",
 		Path:        "/template",
+	},
+	{
+		Name:        "Broadcast",
+		Description: "Module for managing broadcasts",
+		Path:        "/broadcast",
 	},
 }
 

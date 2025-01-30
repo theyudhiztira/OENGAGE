@@ -21,6 +21,7 @@ func (r *authHandler) SetupSystem(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, pkg.ApiResponse{
 			Message: pkg.BadRequest,
 			Status:  false,
+			Error:   pkg.ParseValidationMessage(err),
 		})
 		return
 	}
@@ -47,6 +48,7 @@ func (r *authHandler) LoginHandler(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, pkg.ApiResponse{
 			Message: LoginBadRequest,
 			Status:  false,
+			Error:   pkg.ParseValidationMessage(err),
 		})
 		return
 	}

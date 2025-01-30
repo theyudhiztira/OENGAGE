@@ -3,9 +3,10 @@ package pkg
 import "github.com/gin-gonic/gin"
 
 type ApiResponse struct {
-	Data    interface{} `json:"data,omitempty"`
 	Message string      `json:"message,omitempty"`
 	Status  bool        `json:"status"`
+	Error   interface{} `json:"error,omitempty"`
+	Data    interface{} `json:"data,omitempty"`
 }
 
 func GenerateResponse(data interface{}, message string, status ...bool) ApiResponse {

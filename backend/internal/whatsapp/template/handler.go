@@ -25,7 +25,7 @@ func (h *templateHandler) GetTemplate(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, pkg.ApiResponse{
 			Message: pkg.BadRequest,
 			Status:  false,
-			Data:    pkg.ErrorResp(err),
+			Error:   pkg.ParseValidationMessage(err),
 		})
 		return
 	}
@@ -48,7 +48,7 @@ func (h *templateHandler) CreateTemplate(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, pkg.ApiResponse{
 			Message: pkg.BadRequest,
 			Status:  false,
-			Data:    pkg.ErrorResp(err),
+			Error:   pkg.ParseValidationMessage(err),
 		})
 		return
 	}

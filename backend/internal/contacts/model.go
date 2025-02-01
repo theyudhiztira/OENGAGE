@@ -1,14 +1,17 @@
 package contacts
 
+import "go.mongodb.org/mongo-driver/bson/primitive"
+
 type ContactCard struct {
-	ID          string   `json:"id" binding:"ommitempty"`
-	Name        string   `json:"name" binding:"required"`
-	Phone       string   `json:"phone" binding:"ommitempty"`
-	Email       string   `json:"email" binding:"ommitempty"`
-	Address     string   `json:"address" binding:"ommitempty"`
-	Tags        []string `json:"tags" binding:"ommitempty"`
-	HasWhatsapp bool     `json:"has_whatsapp" binding:"ommitempty"`
-	HasTelegram bool     `json:"has_telegram" binding:"ommitempty"`
+	ID          primitive.ObjectID `json:"_id" bson:"_id" binding:"omitempty"`
+	Name        string             `json:"name" bson:"name" binding:"required"`
+	Phone       string             `json:"phone" bson:"phone" binding:"omitempty"`
+	Email       string             `json:"email" bson:"email" binding:"omitempty"`
+	Address     string             `json:"address" bson:"address" binding:"omitempty"`
+	Tags        []string           `json:"tags" bson:"tags" binding:"omitempty"`
+	HasWhatsapp bool               `json:"has_whatsapp" bson:"has_whatsapp" binding:"omitempty"`
+	HasTelegram bool               `json:"has_telegram" bson:"has_telegram" binding:"omitempty"`
+	Variables   []ContactVariable  `json:"variables" bson:"variables" binding:"omitempty"`
 }
 
 type ContactVariable struct {
@@ -17,6 +20,6 @@ type ContactVariable struct {
 }
 
 type CreateContactRequest struct {
-	ContactCard ContactCard       `json:"contact_card" binding:"required"`
-	Variables   []ContactVariable `json:"variables" binding:"ommitempty"`
+	ContactCard
+	Variables []ContactVariable `json:"variables" binding:"omitempty"`
 }

@@ -83,6 +83,14 @@ var RolesSeeder = []Role{
 					Write: true,
 				},
 			},
+			{
+				ID:     primitive.NewObjectID(),
+				Module: "contacts",
+				PermissionRule: ReadWritePermission{
+					Read:  true,
+					Write: true,
+				},
+			},
 		},
 		CreatedBy:  seederCreatedByObjID,
 		CreeatedAt: time.Now(),
@@ -110,6 +118,11 @@ var ModulesSeeder = []Module{
 		Name:        "Broadcast",
 		Description: "Module for managing broadcasts",
 		Path:        "/broadcast",
+	},
+	{
+		Name:        "Contacts",
+		Description: "Module for managing contacts",
+		Path:        "/contacts",
 	},
 }
 

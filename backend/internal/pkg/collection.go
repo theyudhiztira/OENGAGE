@@ -117,4 +117,26 @@ var DBCollections = []CollectionIndex{
 			},
 		},
 	},
+	{
+		CollectionName: "contacts",
+		Indexes: [][]Index{
+			{
+				{
+					Key:     "email",
+					Value:   1,
+					Options: map[string]interface{}{},
+				},
+				{
+					Key:     "has_whatsapp",
+					Value:   1,
+					Options: map[string]interface{}{},
+				},
+				{
+					Key:     "has_telegram",
+					Value:   1,
+					Options: map[string]interface{}{},
+				},
+			},
+		},
+	},
 }

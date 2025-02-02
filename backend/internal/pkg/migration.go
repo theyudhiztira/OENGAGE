@@ -76,7 +76,7 @@ func MigrateCollection(db *mongo.Database, c CollectionIndex) (bool, error) {
 
 		indexName, err := collection.Indexes().CreateOne(ctx, mongo.IndexModel{
 			Keys:    keys,
-			Options: options.Index().SetUnique(true),
+			Options: idOpts,
 		})
 		if err != nil {
 			collection.Drop(ctx)

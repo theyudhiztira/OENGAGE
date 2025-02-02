@@ -31,12 +31,13 @@ func (h *contactsHandler) Create(c *gin.Context) {
 		return
 	}
 
-	res, err := h.Service.CreateContacts(body)
+	res, err := h.Service.CreateContacts(body, c.GetString("userId"))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, pkg.ApiResponse{
 			Message: pkg.InternalServerError,
 			Status:  false,
 		})
+		return
 	}
 
 	c.JSON(http.StatusCreated, pkg.ApiResponse{

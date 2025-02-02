@@ -169,4 +169,52 @@ var DBCollections = []CollectionIndex{
 			},
 		},
 	},
+	{
+		CollectionName: "contact_variables",
+		Indexes: [][]Index{
+			{
+				{
+					Key:   "contact_id",
+					Value: -1,
+					Options: map[string]interface{}{
+						"unique": false,
+					},
+				},
+			},
+			{
+				{
+					Key:   "key",
+					Value: 1,
+					Options: map[string]interface{}{
+						"unique": false,
+					},
+				},
+			},
+			{
+				{
+					Key:   "value",
+					Value: 1,
+					Options: map[string]interface{}{
+						"unique": false,
+					},
+				},
+			},
+			{
+				{
+					Key:   "created_at",
+					Value: 1,
+					Options: map[string]interface{}{
+						"unique": false,
+					},
+				},
+			},
+			{
+				{
+					Key:     "updated_at",
+					Value:   1,
+					Options: map[string]interface{}{},
+				},
+			},
+		},
+	},
 }

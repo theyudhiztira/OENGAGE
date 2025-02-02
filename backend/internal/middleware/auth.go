@@ -53,7 +53,7 @@ func (m *AuthMiddleware) CheckCredential(moduleName string) gin.HandlerFunc {
 			return
 		}
 
-		c.Set("userId", claims.ID)
+		c.Set("userId", string(claims.Subject))
 		c.Next()
 	}
 }

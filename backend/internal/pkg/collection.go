@@ -104,11 +104,15 @@ var DBCollections = []CollectionIndex{
 					Value:   1,
 					Options: map[string]interface{}{},
 				},
+			},
+			{
 				{
 					Key:     "createdAt",
 					Value:   -1,
 					Options: map[string]interface{}{},
 				},
+			},
+			{
 				{
 					Key:     "updatedAt",
 					Value:   -1,
@@ -122,17 +126,43 @@ var DBCollections = []CollectionIndex{
 		Indexes: [][]Index{
 			{
 				{
-					Key:     "email",
-					Value:   1,
-					Options: map[string]interface{}{},
+					Key:   "email",
+					Value: -1,
+					Options: map[string]interface{}{
+						"unique": false,
+					},
 				},
+			},
+			{
 				{
-					Key:     "has_whatsapp",
-					Value:   1,
-					Options: map[string]interface{}{},
+					Key:   "phone",
+					Value: -1,
+					Options: map[string]interface{}{
+						"unique": false,
+					},
 				},
+			},
+			{
 				{
-					Key:     "has_telegram",
+					Key:   "created_by",
+					Value: -1,
+					Options: map[string]interface{}{
+						"unique": false,
+					},
+				},
+			},
+			{
+				{
+					Key:   "created_at",
+					Value: 1,
+					Options: map[string]interface{}{
+						"unique": false,
+					},
+				},
+			},
+			{
+				{
+					Key:     "updated_at",
 					Value:   1,
 					Options: map[string]interface{}{},
 				},
